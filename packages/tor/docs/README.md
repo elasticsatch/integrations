@@ -22,7 +22,7 @@ This integration collects the following dataset:
 
 - `exit_node`: Tor exit node IP addresses. Documents are written to `logs-tor.exit_node-<namespace>`.
 
-The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after two intervals.
+The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after the configured **Expiration**, counted from the last time it was ingested. The default is `90d`, so the latest index can be used to enrich older traffic with addresses that were Tor exit nodes during the last 90 days. The latest index keeps only the most recent document per address, so it does not record the time ranges during which an address was an exit node.
 
 The latest index is created with `index.mode: lookup` so that it can be used with the ES|QL [`LOOKUP JOIN`](https://www.elastic.co/docs/reference/query-languages/esql/esql-lookup-join) command, for example:
 
@@ -121,6 +121,21 @@ An example event for `exit_node` looks as following:
             "192.0.2.1"
         ]
     },
+    "source": {
+        "ip": "192.0.2.1",
+        "geo": {
+            "city_name": "Las Vegas",
+            "continent_name": "North America",
+            "country_iso_code": "US",
+            "country_name": "United States",
+            "location": {
+                "lat": 36.17497,
+                "lon": -115.13722
+            },
+            "region_iso_code": "US-NV",
+            "region_name": "Nevada"
+        }
+    },
     "tags": [
         "preserve_original_event",
         "forwarded",
@@ -128,7 +143,7 @@ An example event for `exit_node` looks as following:
     ],
     "tor": {
         "exit_node": {
-            "deleted_at": "2026-10-26T10:00:00Z"
+            "deleted_at": "2027-01-24T08:00:00.000Z"
         }
     }
 }
@@ -160,8 +175,20 @@ An example event for `exit_node` looks as following:
 | input.type | Type of Filebeat input. | keyword |
 | labels.interval | User-configured value for the `Interval` setting. It is used to calculate the expiration time. | keyword |
 | related.ip | All of the IPs seen on your event. | ip |
+| source.geo.city_name | City name. | keyword |
+| source.geo.continent_code | Two-letter code representing continent's name. | keyword |
+| source.geo.continent_name | Name of the continent. | keyword |
+| source.geo.country_iso_code | Country ISO code. | keyword |
+| source.geo.country_name | Country name. | keyword |
+| source.geo.location | Longitude and latitude. | geo_point |
+| source.geo.name | User-defined description of a location, at the level of granularity they care about. Could be the name of their data centers, the floor number, if this describes a local physical entity, city names. Not typically used in automated geolocation. | keyword |
+| source.geo.postal_code | Postal code associated with the location. Values appropriate for this field may also be known as a postcode or ZIP code and will vary widely from country to country. | keyword |
+| source.geo.region_iso_code | Region ISO code. | keyword |
+| source.geo.region_name | Region name. | keyword |
+| source.geo.timezone | The time zone of the location, such as IANA time zone name. | keyword |
+| source.ip | IP address of the source (IPv4 or IPv6). | ip |
 | tags | List of keywords used to tag each event. | keyword |
-| tor.exit_node.deleted_at | The timestamp when the address is (will be) removed from the latest destination index. It is `event.ingested` plus two times `labels.interval`. | date |
+| tor.exit_node.deleted_at | The timestamp when the address is (will be) removed from the latest destination index. It is `event.ingested` plus the configured expiration (`90d` by default). | date |
 
 
 ### Inputs used
