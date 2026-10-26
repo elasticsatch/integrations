@@ -36,7 +36,7 @@ _meta:
   managed: true
   # Bump this version to delete, reinstall, and restart the transform during package.
   # Version bump is needed if there is any code change in transform.
-  fleet_transform_version: 0.1.0
+  fleet_transform_version: 0.2.0
   # The destination index and alias are outside the patterns that the kibana_system
   # user can write to, so the transform runs with the credentials of the installing user.
   run_as_kibana_system: false
