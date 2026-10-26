@@ -1,0 +1,121 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2026-10-26T08:00:00.000Z",
+            "ecs": {
+                "version": "9.5.0"
+            },
+            "event": {
+                "category": [
+                    "network"
+                ],
+                "ingested": "2026-10-26T08:00:00.000000000Z",
+                "kind": "state",
+                "original": "171.25.193.25",
+                "type": [
+                    "info"
+                ]
+            },
+            "host": {
+                "ip": [
+                    "171.25.193.25"
+                ],
+                "type": "tor_exit_node"
+            },
+            "labels": {
+                "interval": "1h"
+            },
+            "related": {
+                "ip": [
+                    "171.25.193.25"
+                ]
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "tor": {
+                "exit_node": {
+                    "deleted_at": "2026-10-26T10:00:00Z"
+                }
+            }
+        },
+        {
+            "@timestamp": "2026-10-26T08:00:00.000Z",
+            "ecs": {
+                "version": "9.5.0"
+            },
+            "event": {
+                "category": [
+                    "network"
+                ],
+                "ingested": "2026-10-26T08:00:00.000000000Z",
+                "kind": "state",
+                "original": "2a0b:f4c2::1",
+                "type": [
+                    "info"
+                ]
+            },
+            "host": {
+                "ip": [
+                    "2a0b:f4c2::1"
+                ],
+                "type": "tor_exit_node"
+            },
+            "labels": {
+                "interval": "1h"
+            },
+            "related": {
+                "ip": [
+                    "2a0b:f4c2::1"
+                ]
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "tor": {
+                "exit_node": {
+                    "deleted_at": "2026-10-26T10:00:00Z"
+                }
+            }
+        },
+        {
+            "@timestamp": "2026-10-26T08:00:00.000Z",
+            "ecs": {
+                "version": "9.5.0"
+            },
+            "event": {
+                "category": [
+                    "network"
+                ],
+                "ingested": "2026-10-26T08:00:00.000000000Z",
+                "kind": "state",
+                "original": "80.67.167.81",
+                "type": [
+                    "info"
+                ]
+            },
+            "host": {
+                "ip": [
+                    "80.67.167.81"
+                ],
+                "type": "tor_exit_node"
+            },
+            "labels": {
+                "interval": "1h"
+            },
+            "related": {
+                "ip": [
+                    "80.67.167.81"
+                ]
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "tor": {
+                "exit_node": {
+                    "deleted_at": "2026-10-26T10:00:00Z"
+                }
+            }
+        }
+    ]
+}

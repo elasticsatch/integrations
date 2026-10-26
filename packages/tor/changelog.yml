@@ -1,0 +1,6 @@
+# newer versions go on top
+- version: "0.1.0"
+  changes:
+    - description: Initial release of the Tor integration, collecting exit node IP addresses from the Tor Project bulk exit list.
+      type: enhancement
+      link: https://github.com/elastic/integrations/pull/1 # TODO: replace with the actual PR number

@@ -1,0 +1,51 @@
+{
+    "@timestamp": "2026-10-26T08:00:00.000Z",
+    "data_stream": {
+        "dataset": "tor.exit_node",
+        "namespace": "ep",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.5.0"
+    },
+    "event": {
+        "category": [
+            "network"
+        ],
+        "ingested": "2026-10-26T08:00:00.000000000Z",
+        "kind": "state",
+        "original": "171.25.193.25",
+        "type": [
+            "info"
+        ],
+        "dataset": "tor.exit_node",
+        "module": "tor"
+    },
+    "host": {
+        "ip": [
+            "171.25.193.25"
+        ],
+        "type": "tor_exit_node"
+    },
+    "input": {
+        "type": "cel"
+    },
+    "labels": {
+        "interval": "1h"
+    },
+    "related": {
+        "ip": [
+            "171.25.193.25"
+        ]
+    },
+    "tags": [
+        "preserve_original_event",
+        "forwarded",
+        "tor-exit-node"
+    ],
+    "tor": {
+        "exit_node": {
+            "deleted_at": "2026-10-26T10:00:00Z"
+        }
+    }
+}
