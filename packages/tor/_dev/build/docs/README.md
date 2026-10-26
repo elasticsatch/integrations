@@ -1,6 +1,8 @@
-# Tor integration for Elastic
+# Tor Exit Node List (Unofficial) integration for Elastic
 
 ## Overview
+
+This is an unofficial integration. It is not endorsed or sponsored by, or affiliated with, The Tor Project. Tor is a trademark of The Tor Project; all rights reserved. See the official Tor website at [https://torproject.org](https://torproject.org).
 
 The Tor integration collects the IP addresses of Tor exit nodes from the [bulk exit list](https://check.torproject.org/torbulkexitlist) published by [The Tor Project](https://www.torproject.org/).
 
