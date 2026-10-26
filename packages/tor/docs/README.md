@@ -12,7 +12,7 @@ This integration reads the plain text list served at `https://check.torproject.o
 
 ### How it works
 
-Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to request the list at a configurable interval. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `tor_exit_node`.
+Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to check the list at a configurable interval (default `10m`). The request carries the `If-Modified-Since` header with the `Last-Modified` value of the last successful download, and the list is ingested only if the server returns `200`. A `304 Not Modified` response ingests nothing. The server was observed to support conditional requests this way, but the Tor Project does not document it. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `tor_exit_node`.
 
 The Tor Project states that the list is updated at most once every 40 minutes, and that fetching it every hour is reasonable. It does not document a fixed update time, so this integration uses the time of ingestion for `@timestamp` and `event.ingested`.
 
@@ -50,7 +50,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-tor.exit_node
 
 1. In Kibana, go to **Management > Integrations** and search for **Tor**.
 2. Select **Add Tor**.
-3. Adjust the **Interval** if needed. The default is `1h`.
+3. Adjust the **Interval** and **Expiration** if needed. The defaults are `10m` and `90d`.
 4. Select the agent policy and save the integration.
 
 ### Validation
@@ -68,7 +68,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-tor.exit_node
 
 ## Performance and scaling
 
-The list is small (on the order of a thousand addresses). Every request ingests the full list again, so the number of documents per day is the list size multiplied by the number of requests per day. Increase the **Interval** to reduce duplicate documents. Documents in the data stream are retained for 5 days by default.
+The list is small (on the order of a thousand addresses). The full list is ingested only when it has changed since the last successful request, so the number of documents per day is the list size multiplied by the number of list updates per day. The Tor Project states that the list is updated at most once every 40 minutes. Documents in the data stream are retained for 5 days by default.
 
 ## Reference
 
@@ -114,7 +114,7 @@ An example event for `exit_node` looks as following:
         "type": "cel"
     },
     "labels": {
-        "interval": "1h"
+        "interval": "10m"
     },
     "related": {
         "ip": [

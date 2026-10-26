@@ -1,4 +1,9 @@
 # newer versions go on top
+- version: "0.1.2"
+  changes:
+    - description: Download the list only when it changed, using the If-Modified-Since header, and change the default interval to 10m.
+      type: enhancement
+      link: https://github.com/elastic/integrations/pull/1 # TODO: replace with the actual PR number
 - version: "0.1.1"
   changes:
     - description: Add the configurable expiration, source.ip and source.geo, and run the latest transform with the installing user's credentials.

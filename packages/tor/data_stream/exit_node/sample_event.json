@@ -31,7 +31,7 @@
         "type": "cel"
     },
     "labels": {
-        "interval": "1h"
+        "interval": "10m"
     },
     "related": {
         "ip": [

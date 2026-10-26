@@ -23,8 +23,19 @@ redact:
   fields: ~
 program: |-
   state.with(
-    get(state.url).as(resp,
-      (resp.StatusCode == 200) ?
+    get_request(state.url).with({
+      "Header": (state.?cursor.last_modified.orValue("") != "") ?
+        {"If-Modified-Since": [state.cursor.last_modified]}
+      :
+        {},
+    }).do_request().as(resp,
+      (resp.StatusCode == 304) ?
+        // The list has not changed since the last successful request.
+        dyn({
+          "events": [],
+          "want_more": false,
+        })
+      : (resp.StatusCode == 200) ?
         dyn({
           "events": string(resp.Body).split("\n").map(l,
             l.trim_space() != "" && !l.has_prefix("#"),
@@ -32,6 +43,8 @@ program: |-
               "message": l.trim_space(),
             }
           ),
+          "cursor": {"last_modified": resp.Header[?"Last-Modified"][?0].orValue("")},
+          "want_more": false,
         })
       :
         dyn({
@@ -47,6 +60,7 @@ program: |-
               ),
             },
           },
+          "want_more": false,
         })
     )
   )

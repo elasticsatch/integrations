@@ -1,8 +1,18 @@
 rules:
   - path: /torbulkexitlist
     methods: ["GET"]
+    request_headers:
+      If-Modified-Since: "Mon, 26 Oct 2026 10:45:46 GMT"
+    responses:
+      - status_code: 304
+        body: ""
+  - path: /torbulkexitlist
+    methods: ["GET"]
     responses:
       - status_code: 200
+        headers:
+          Last-Modified:
+            - "Mon, 26 Oct 2026 10:45:46 GMT"
         body: |-
           192.0.2.1
           192.0.2.2
