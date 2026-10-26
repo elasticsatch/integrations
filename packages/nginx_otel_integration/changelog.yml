@@ -1,4 +1,12 @@
 # newer versions go on top
+- version: "0.3.0"
+  changes:
+    - description: Bump `nginx_otel_input` input dependency from 0.2.2 to 0.3.0.
+      type: enhancement
+      link: https://github.com/elastic/integrations/pull/REPLACE_ME
+    - description: Bump `nginx_otel` content dependency from 0.8.0 to 0.9.0.
+      type: enhancement
+      link: https://github.com/elastic/integrations/pull/REPLACE_ME
 - version: "0.2.0"
   changes:
     - description: Parse optional request and upstream timing fields (rt, uct, uht, urt) from access logs into duration attributes in seconds.
