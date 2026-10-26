@@ -42,7 +42,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-tor.exit_node
 
 - Elastic Agent with network access to `check.torproject.org` over HTTPS (or a proxy that can reach it).
 - No credentials are required.
-- The latest transform requires the permissions described in the [transform setup](https://www.elastic.co/docs/explore-analyze/transforms/transform-setup) documentation.
+- The latest transform requires the permissions described in the [transform setup](https://www.elastic.co/docs/explore-analyze/transforms/transform-setup) documentation. The transform runs with the credentials of the user who installs the integration, so that user also needs read access to `logs-tor.exit_node-*` and write access to `logs-tor_latest.*`. If the user lacks these privileges, the transform is installed but deferred. Reauthorize it from the **Assets** tab of the integration with a user that has them.
 
 ## How do I deploy this integration?
 
