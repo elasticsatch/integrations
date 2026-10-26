@@ -97,7 +97,7 @@ An example event for `exit_node` looks as following:
         ],
         "ingested": "2026-10-26T08:00:00.000000000Z",
         "kind": "state",
-        "original": "171.25.193.25",
+        "original": "192.0.2.1",
         "type": [
             "info"
         ],
@@ -106,7 +106,7 @@ An example event for `exit_node` looks as following:
     },
     "host": {
         "ip": [
-            "171.25.193.25"
+            "192.0.2.1"
         ],
         "type": "tor_exit_node"
     },
@@ -118,7 +118,7 @@ An example event for `exit_node` looks as following:
     },
     "related": {
         "ip": [
-            "171.25.193.25"
+            "192.0.2.1"
         ]
     },
     "tags": [
