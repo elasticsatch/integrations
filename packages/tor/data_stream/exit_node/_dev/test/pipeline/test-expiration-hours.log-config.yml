@@ -1,0 +1,4 @@
+fields:
+  _conf:
+    interval: 1h
+    expiration: 12h

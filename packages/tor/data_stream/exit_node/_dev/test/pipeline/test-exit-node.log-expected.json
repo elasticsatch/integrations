@@ -1,7 +1,7 @@
 {
     "expected": [
         {
-            "@timestamp": "2026-10-26T09:05:58.255636777Z",
+            "@timestamp": "2026-10-26T09:47:31.942349026Z",
             "ecs": {
                 "version": "9.5.0"
             },
@@ -9,7 +9,7 @@
                 "category": [
                     "network"
                 ],
-                "ingested": "2026-10-26T09:05:58.255636777Z",
+                "ingested": "2026-10-26T09:47:31.942349026Z",
                 "kind": "state",
                 "original": "192.0.2.1",
                 "type": [
@@ -30,17 +30,32 @@
                     "192.0.2.1"
                 ]
             },
+            "source": {
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.1"
+            },
             "tags": [
                 "preserve_original_event"
             ],
             "tor": {
                 "exit_node": {
-                    "deleted_at": "2026-10-26T11:05:58.255636777Z"
+                    "deleted_at": "2027-01-24T09:47:31.942349026Z"
                 }
             }
         },
         {
-            "@timestamp": "2026-10-26T09:05:58.2556995Z",
+            "@timestamp": "2026-10-26T09:47:31.94238659Z",
             "ecs": {
                 "version": "9.5.0"
             },
@@ -48,7 +63,7 @@
                 "category": [
                     "network"
                 ],
-                "ingested": "2026-10-26T09:05:58.2556995Z",
+                "ingested": "2026-10-26T09:47:31.94238659Z",
                 "kind": "state",
                 "original": "2001:db8::1",
                 "type": [
@@ -69,17 +84,32 @@
                     "2001:db8::1"
                 ]
             },
+            "source": {
+                "geo": {
+                    "city_name": "Greenwich",
+                    "continent_name": "Europe",
+                    "country_iso_code": "GB",
+                    "country_name": "United Kingdom",
+                    "location": {
+                        "lat": 51.47687,
+                        "lon": -4.1E-4
+                    },
+                    "region_iso_code": "GB-ENG",
+                    "region_name": "England"
+                },
+                "ip": "2001:db8::1"
+            },
             "tags": [
                 "preserve_original_event"
             ],
             "tor": {
                 "exit_node": {
-                    "deleted_at": "2026-10-26T11:05:58.255699500Z"
+                    "deleted_at": "2027-01-24T09:47:31.942386590Z"
                 }
             }
         },
         {
-            "@timestamp": "2026-10-26T09:05:58.255710659Z",
+            "@timestamp": "2026-10-26T09:47:31.942392217Z",
             "ecs": {
                 "version": "9.5.0"
             },
@@ -87,7 +117,7 @@
                 "category": [
                     "network"
                 ],
-                "ingested": "2026-10-26T09:05:58.255710659Z",
+                "ingested": "2026-10-26T09:47:31.942392217Z",
                 "kind": "state",
                 "original": "198.51.100.7",
                 "type": [
@@ -108,12 +138,27 @@
                     "198.51.100.7"
                 ]
             },
+            "source": {
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.7"
+            },
             "tags": [
                 "preserve_original_event"
             ],
             "tor": {
                 "exit_node": {
-                    "deleted_at": "2026-10-26T11:05:58.255710659Z"
+                    "deleted_at": "2027-01-24T09:47:31.942392217Z"
                 }
             }
         }

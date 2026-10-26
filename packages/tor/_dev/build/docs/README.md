@@ -22,7 +22,7 @@ This integration collects the following dataset:
 
 - `exit_node`: Tor exit node IP addresses. Documents are written to `logs-tor.exit_node-<namespace>`.
 
-The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after two intervals.
+The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after the configured **Expiration**, counted from the last time it was ingested. The default is `90d`, so the latest index can be used to enrich older traffic with addresses that were Tor exit nodes during the last 90 days. The latest index keeps only the most recent document per address, so it does not record the time ranges during which an address was an exit node.
 
 The latest index is created with `index.mode: lookup` so that it can be used with the ES|QL [`LOOKUP JOIN`](https://www.elastic.co/docs/reference/query-languages/esql/esql-lookup-join) command, for example:
 

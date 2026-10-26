@@ -82,39 +82,45 @@ processors:
       value: '{{{_ip}}}'
       allow_duplicates: false
   - set:
+      tag: set_source_ip
+      field: source.ip
+      copy_from: _ip
+  - geoip:
+      tag: geoip_source_ip
+      field: source.ip
+      target_field: source.geo
+      ignore_missing: true
+  - set:
       tag: set_host_type
       field: host.type
       value: tor_exit_node
-  # The list is ingested in full at every interval. An address that is no longer
-  # in the list is not refreshed, and expires from the latest index after two
-  # intervals. This keeps the address present if a single request fails.
+  # The list is ingested in full at every interval, so an address that is still
+  # in the list is refreshed with a new expiration time. An address that is no
+  # longer in the list expires from the latest index after `expiration`.
   - script:
       tag: script_deleted_at
       lang: painless
-      description: Computes `tor.exit_node.deleted_at` as `event.ingested` plus two `labels.interval`.
+      description: Computes `tor.exit_node.deleted_at` as `event.ingested` plus the configured expiration. An invalid or missing expiration falls back to 90 days. No error is set, because the latest transform excludes documents that have `error.message`.
       source: |-
-        long amount = 1L;
-        String unit = 'h';
-        String dur = ctx.labels?.interval;
-        boolean valid = false;
+        long amount = 90L;
+        String unit = 'd';
+        String dur = ctx._conf?.expiration;
         if (dur != null && dur.length() > 1) {
-          unit = dur.substring(dur.length() - 1);
+          String u = dur.substring(dur.length() - 1);
+          boolean valid = false;
+          long n = 0L;
           try {
-            amount = Long.parseLong(dur.substring(0, dur.length() - 1));
-            valid = (unit == 'h' || unit == 'm' || unit == 's') && amount > 0;
+            n = Long.parseLong(dur.substring(0, dur.length() - 1));
+            valid = (u == 'd' || u == 'h' || u == 'm' || u == 's') && n > 0;
           } catch (NumberFormatException e) {
             valid = false;
           }
-        }
-        if (!valid) {
-          amount = 1L;
-          unit = 'h';
-          if (ctx.error == null) {
-            ctx.error = new HashMap();
+          if (valid) {
+            amount = n;
+            unit = u;
           }
-          ctx.error.message = 'invalid interval: using default of 1h for expiration';
         }
-        long secs = unit == 'h' ? amount * 3600L : (unit == 'm' ? amount * 60L : amount);
+        long secs = unit == 'd' ? amount * 86400L : (unit == 'h' ? amount * 3600L : (unit == 'm' ? amount * 60L : amount));
         ZonedDateTime ingested = ctx.event.ingested;
         if (ctx.tor == null) {
           ctx.tor = new HashMap();
@@ -122,7 +128,7 @@ processors:
         if (ctx.tor.exit_node == null) {
           ctx.tor.exit_node = new HashMap();
         }
-        ctx.tor.exit_node.deleted_at = ingested.plusSeconds(2L * secs).toString();
+        ctx.tor.exit_node.deleted_at = ingested.plusSeconds(secs).toString();
   - remove:
       tag: remove_event_original
       field: event.original

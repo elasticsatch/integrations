@@ -5,3 +5,4 @@ dynamic_fields:
 fields:
   _conf:
     interval: 1h
+    expiration: 90d

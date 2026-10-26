@@ -37,6 +37,14 @@ streams:
         show_user: true
         default: 1h
         description: Duration between requests to the Tor Project bulk exit list. Supported units for this parameter are h/m/s. Example `1h`. The Tor Project states that the list is updated at most once every 40 minutes. Every request ingests the full list again.
+      - name: expiration
+        type: text
+        title: Expiration
+        multi: false
+        required: true
+        show_user: true
+        default: 90d
+        description: Duration after which an address that is no longer in the list expires from the latest index (`logs-tor_latest.exit_node`). The duration is counted from the last time the address was ingested. Supported units are d/h/m/s. Example `90d`. Data stream documents are retained separately.
       - name: ssl
         type: yaml
         title: SSL Configuration

@@ -1,0 +1,54 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2026-10-26T09:47:32.824221324Z",
+            "ecs": {
+                "version": "9.5.0"
+            },
+            "event": {
+                "category": [
+                    "network"
+                ],
+                "ingested": "2026-10-26T09:47:32.824221324Z",
+                "kind": "state",
+                "type": [
+                    "info"
+                ]
+            },
+            "host": {
+                "ip": [
+                    "198.51.100.7"
+                ],
+                "type": "tor_exit_node"
+            },
+            "labels": {
+                "interval": "1h"
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.7"
+                ]
+            },
+            "source": {
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.7"
+            },
+            "tor": {
+                "exit_node": {
+                    "deleted_at": "2026-10-26T21:47:32.824221324Z"
+                }
+            }
+        }
+    ]
+}

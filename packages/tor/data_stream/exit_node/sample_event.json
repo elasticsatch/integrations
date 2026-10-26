@@ -38,6 +38,21 @@
             "192.0.2.1"
         ]
     },
+    "source": {
+        "ip": "192.0.2.1",
+        "geo": {
+            "city_name": "Las Vegas",
+            "continent_name": "North America",
+            "country_iso_code": "US",
+            "country_name": "United States",
+            "location": {
+                "lat": 36.17497,
+                "lon": -115.13722
+            },
+            "region_iso_code": "US-NV",
+            "region_name": "Nevada"
+        }
+    },
     "tags": [
         "preserve_original_event",
         "forwarded",
@@ -45,7 +60,7 @@
     ],
     "tor": {
         "exit_node": {
-            "deleted_at": "2026-10-26T10:00:00Z"
+            "deleted_at": "2027-01-24T08:00:00.000Z"
         }
     }
 }

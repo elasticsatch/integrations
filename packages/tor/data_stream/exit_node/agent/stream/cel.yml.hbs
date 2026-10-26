@@ -4,6 +4,7 @@ fields_under_root: true
 fields:
   _conf:
     interval: "{{interval}}"
+    expiration: "{{expiration}}"
 resource.tracer:
   enabled: {{enable_request_tracer}}
   filename: "../../logs/cel/http-request-trace-*.ndjson"
