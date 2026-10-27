@@ -43,6 +43,7 @@ List entries can remain for a long time after a relay stops exiting, and an exit
 
 - Look up whether an address seen in your events is a Tor exit node, for example with an enrich policy or a custom detection rule built on `logs-tor_latest.exit_node`.
 - Hunt for activity that originates from the Tor network, including grouping exit nodes by autonomous system (`source.as`).
+- Use the **[Tor Exit Node] Overview** dashboard (data view `logs-tor.exit_node-*`) for a quick view of exit-node volume, geography, and ASN.
 
 ## What do I need to use this integration?
 

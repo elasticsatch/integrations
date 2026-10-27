@@ -1,7 +1,7 @@
 format_version: "3.4.2"
 name: tor
 title: Tor Exit Node List (Unofficial)
-version: 0.1.7
+version: 0.1.8
 source:
   license: "Elastic-2.0"
 description: Unofficial integration that ingests Tor exit node IP addresses from the Tor Project bulk exit list. Not endorsed by or affiliated with The Tor Project. Tor is a trademark of The Tor Project; all rights reserved.

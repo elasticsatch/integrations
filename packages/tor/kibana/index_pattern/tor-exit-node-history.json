@@ -1,0 +1,18 @@
+{
+    "type": "index-pattern",
+    "id": "tor-exit-node-history",
+    "typeMigrationVersion": "8.0.0",
+    "coreMigrationVersion": "8.8.0",
+    "attributes": {
+        "allowHidden": false,
+        "fieldAttrs": "{}",
+        "fieldFormatMap": "{}",
+        "fields": "[]",
+        "name": "Tor exit node (history)",
+        "runtimeFieldMap": "{}",
+        "sourceFilters": "[]",
+        "timeFieldName": "@timestamp",
+        "title": "logs-tor.exit_node-*"
+    },
+    "references": []
+}
