@@ -1,0 +1,47 @@
+# Use of "*" to use all namespaces defined.
+source:
+  index:
+    - "logs-onion_router.egress-*"
+  query:
+    bool:
+      must_not:
+        exists:
+          field: error.message
+# The version suffix on the dest.index should be incremented if a breaking change
+# is made to the index mapping. You must also bump the fleet_transform_version
+# for any change to this transform configuration to take effect. The old destination
+# index is not automatically removed.
+dest:
+  index: "logs-onion_router_latest.dest_egress-1"
+  aliases:
+    - alias: "logs-onion_router_latest.egress"
+      move_on_creation: true
+latest:
+  unique_key:
+    # Namespace is deliberately excluded: an egress address is global, so the
+    # same address from different namespaces is deduplicated to one entry.
+    - host.ip
+  sort: "@timestamp"
+description: Latest onion-router egress IP addresses.
+frequency: 30s
+sync:
+  time:
+    field: event.ingested
+    delay: 120s
+# Removes documents whose deleted_at is older than max_age. Combined with the
+# stream Expiration (default 2h), addresses absent from the newest bulk list
+# drop out of this destination shortly after they stop being ingested.
+retention_policy:
+  time:
+    field: onion_router.egress.deleted_at
+    max_age: 1m
+_meta:
+  managed: true
+  # Bump this version to delete, reinstall, and restart the transform during package.
+  # Version bump is needed if there is any code change in transform.
+  fleet_transform_version: 0.1.0
+  # The destination index and alias are outside the patterns that the kibana_system
+  # user can write to, so the transform runs with the credentials of the installing user.
+  run_as_kibana_system: false
+settings:
+  num_failure_retries: -1

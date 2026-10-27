@@ -1,0 +1,195 @@
+---
+description: Pipeline for processing the Tor Project bulk exit list.
+processors:
+  - remove:
+      field:
+        - organization
+        - division
+        - team
+      ignore_missing: true
+      if: ctx.organization instanceof String && ctx.division instanceof String && ctx.team instanceof String
+      tag: remove_agentless_tags
+      description: >-
+        Removes the fields added by Agentless as metadata,
+        as they can collide with ECS fields.
+  - set:
+      tag: set_ecs_version
+      field: ecs.version
+      value: '9.5.0'
+  - terminate:
+      tag: data_collection_error
+      if: ctx.error?.message != null && ctx.message == null && ctx.event?.original == null
+      description: Error message set and no data to process.
+  - drop:
+      tag: drop_empty_message
+      description: Drop if message is empty.
+      if: ctx.message == null || ctx.message.trim() == ''
+  - set:
+      tag: set_event_kind
+      field: event.kind
+      value: state
+  - set:
+      tag: set_event_category
+      field: event.category
+      value: [network]
+  - set:
+      tag: set_event_type
+      field: event.type
+      value: [info]
+  # The bulk exit list carries no per-address timestamps, so the time of
+  # ingestion is used for both fields.
+  - set:
+      tag: set_event_ingested
+      field: event.ingested
+      copy_from: _ingest.timestamp
+  - set:
+      tag: set_timestamp
+      field: '@timestamp'
+      copy_from: _ingest.timestamp
+  - set:
+      tag: set_labels_interval
+      field: labels.interval
+      copy_from: _conf.interval
+      if: ctx._conf?.interval != null && ctx._conf.interval != ''
+  - rename:
+      tag: rename_message_to_event_original
+      field: message
+      target_field: event.original
+      ignore_missing: true
+      if: ctx.event?.original == null
+  - remove:
+      tag: remove_message
+      field: message
+      ignore_missing: true
+      if: ctx.event?.original != null
+      description: The `message` field is no longer required if the document has an `event.original` field.
+  - trim:
+      tag: trim_event_original_to_tmp_ip
+      field: event.original
+      target_field: _ip
+  - convert:
+      tag: convert_tmp_ip
+      field: _ip
+      type: ip
+  - append:
+      tag: append_host_ip
+      field: host.ip
+      value: '{{{_ip}}}'
+      allow_duplicates: false
+  - append:
+      tag: append_related_ip
+      field: related.ip
+      value: '{{{_ip}}}'
+      allow_duplicates: false
+  - set:
+      tag: set_source_ip
+      field: source.ip
+      copy_from: _ip
+  - geoip:
+      tag: geoip_source_ip
+      field: source.ip
+      target_field: source.geo
+      ignore_missing: true
+  - geoip:
+      tag: geoip_source_as
+      database_file: GeoLite2-ASN.mmdb
+      field: source.ip
+      target_field: source.as
+      properties:
+        - asn
+        - organization_name
+      ignore_missing: true
+  - rename:
+      tag: rename_source_as_asn
+      field: source.as.asn
+      target_field: source.as.number
+      ignore_missing: true
+  - rename:
+      tag: rename_source_as_organization_name
+      field: source.as.organization_name
+      target_field: source.as.organization.name
+      ignore_missing: true
+  - set:
+      tag: set_host_type
+      field: host.type
+      value: onion_router_egress
+  # The list is ingested in full when it changes. Addresses still present are
+  # refreshed with a new deleted_at. Addresses missing from the new list keep
+  # their previous deleted_at and are removed from the latest index by the
+  # transform retention_policy after that time (plus max_age).
+  - script:
+      tag: script_deleted_at
+      lang: painless
+      description: Computes `onion_router.egress.deleted_at` as `event.ingested` plus the configured expiration. An invalid or missing expiration falls back to 2 hours. No error is set, because the latest transform excludes documents that have `error.message`.
+      source: |-
+        long amount = 2L;
+        String unit = 'h';
+        String dur = ctx._conf?.expiration;
+        if (dur != null && dur.length() > 1) {
+          String u = dur.substring(dur.length() - 1);
+          boolean valid = false;
+          long n = 0L;
+          try {
+            n = Long.parseLong(dur.substring(0, dur.length() - 1));
+            valid = (u == 'd' || u == 'h' || u == 'm' || u == 's') && n > 0;
+          } catch (NumberFormatException e) {
+            valid = false;
+          }
+          if (valid) {
+            amount = n;
+            unit = u;
+          }
+        }
+        long secs = unit == 'd' ? amount * 86400L : (unit == 'h' ? amount * 3600L : (unit == 'm' ? amount * 60L : amount));
+        ZonedDateTime ingested = ctx.event.ingested;
+        if (ctx.onion_router == null) {
+          ctx.onion_router = new HashMap();
+        }
+        if (ctx.onion_router.egress == null) {
+          ctx.onion_router.egress = new HashMap();
+        }
+        ctx.onion_router.egress.deleted_at = ingested.plusSeconds(secs).toString();
+  - remove:
+      tag: remove_event_original
+      field: event.original
+      ignore_missing: true
+      if: ctx.tags == null || !ctx.tags.contains('preserve_original_event')
+  - remove:
+      tag: remove_temporary_fields
+      field:
+        - _ip
+        - _conf
+      ignore_missing: true
+  - script:
+      tag: script_remove_empty_values
+      description: Remove null/empty values recursively.
+      lang: painless
+      source: |-
+        boolean drop(Object o) {
+          if (o == null || o == '') {
+            return true;
+          } else if (o instanceof Map) {
+            ((Map) o).values().removeIf(v -> drop(v));
+            return (((Map) o).size() == 0);
+          } else if (o instanceof List) {
+            ((List) o).removeIf(v -> drop(v));
+            return (((List) o).length == 0);
+          }
+          return false;
+        }
+        drop(ctx);
+on_failure:
+  - set:
+      field: event.kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}in pipeline '{{{ _ingest.pipeline }}}'
+        failed with message '{{{ _ingest.on_failure_message }}}'

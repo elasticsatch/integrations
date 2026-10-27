@@ -1,0 +1,8 @@
+dynamic_fields:
+  event.ingested: ".*"
+  "@timestamp": ".*"
+  onion_router.egress.deleted_at: ".*"
+fields:
+  _conf:
+    interval: 1h
+    expiration: 2h

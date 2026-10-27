@@ -1,0 +1,12 @@
+input: cel
+service: onion_router
+data_stream:
+  vars:
+    url: http://{{Hostname}}:{{Port}}/torbulkexitlist
+    preserve_original_event: true
+    interval: 1h
+vars:
+  enable_request_tracer: true
+assert:
+  hit_count: 5
+wait_for_data_timeout: 2m
