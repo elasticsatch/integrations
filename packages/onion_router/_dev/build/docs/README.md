@@ -10,6 +10,8 @@ These egress addresses are useful for detection and investigation, for example t
 
 ### Compatibility
 
+This integration requires Kibana `^8.19.0` or `^9.1.0`, as declared in the package manifest. It works with Elastic Agent managed by Fleet and with agentless deployments where available, and it needs Elasticsearch GeoIP databases (including `GeoLite2-ASN`) for enrichment.
+
 This integration reads the plain text list served at `https://check.torproject.org/torbulkexitlist`. The list contains one IP address per line. The list does not carry any per-address timestamp.
 
 ### How it works
@@ -67,6 +69,10 @@ The lookup index mode cannot be applied to a data stream, so `logs-onion_router.
 - If no documents arrive, check the Elastic Agent logs for HTTP errors. A non-200 response is reported as an event with `error.message`.
 - To inspect the exact requests and responses, enable **Enable request tracing** in the integration settings. Tracing writes data to the agent's local file system, so use it only while debugging.
 - If the agent must use a proxy, set **Proxy URL**.
+- If `source.geo` or `source.as` is missing, confirm that the Elasticsearch GeoIP databases are available and not disabled in your cluster. Private or reserved addresses are not enriched.
+- If the latest index is empty or stale, check that the transform is started and has the required permissions. See the **Assets** tab to reauthorize it.
+- If no events arrive after the first download, this is expected while the list is unchanged: the server answers `304 Not Modified` and nothing is ingested until the list changes.
+- An invalid **Expiration** value falls back to `2h`.
 
 ## Performance and scaling
 
@@ -85,6 +91,12 @@ The data is retrieved from the [Tor Project bulk exit list](https://check.torpro
 #### ECS field reference
 
 {{fields "egress"}}
+
+### Data stream
+
+| Data stream | Type | Description |
+|---|---|---|
+| `onion_router.egress` | logs | One event per onion-router egress IP address, collected with the CEL input. |
 
 ### Inputs used
 
