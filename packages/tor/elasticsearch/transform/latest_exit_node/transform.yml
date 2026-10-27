@@ -28,6 +28,9 @@ sync:
   time:
     field: event.ingested
     delay: 120s
+# Removes documents whose deleted_at is older than max_age. Combined with the
+# stream Expiration (default 2h), addresses absent from the newest bulk list
+# drop out of this destination shortly after they stop being ingested.
 retention_policy:
   time:
     field: tor.exit_node.deleted_at

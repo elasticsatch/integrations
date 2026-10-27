@@ -43,8 +43,15 @@ streams:
         multi: false
         required: true
         show_user: true
-        default: 90d
-        description: Duration after which an address that is no longer in the list expires from the latest index (`logs-tor_latest.exit_node`). The duration is counted from the last time the address was ingested. Supported units are d/h/m/s. Example `90d`. Data stream documents are retained separately.
+        default: 2h
+        description: >-
+          Grace period after which an address that is no longer in the bulk list
+          is removed from the latest index (`logs-tor_latest.exit_node`). Addresses
+          still in the list are refreshed on every successful download, so the
+          latest index converges to the current list after this window. Choose a
+          value slightly longer than the list update cadence (the Tor Project
+          updates at most about every 40 minutes). Supported units are d/h/m/s.
+          Example `2h`. Data stream retention is separate (`lifecycle.yml`).
       - name: ssl
         type: yaml
         title: SSL Configuration

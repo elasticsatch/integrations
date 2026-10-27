@@ -90,20 +90,40 @@ processors:
       field: source.ip
       target_field: source.geo
       ignore_missing: true
+  - geoip:
+      tag: geoip_source_as
+      database_file: GeoLite2-ASN.mmdb
+      field: source.ip
+      target_field: source.as
+      properties:
+        - asn
+        - organization_name
+      ignore_missing: true
+  - rename:
+      tag: rename_source_as_asn
+      field: source.as.asn
+      target_field: source.as.number
+      ignore_missing: true
+  - rename:
+      tag: rename_source_as_organization_name
+      field: source.as.organization_name
+      target_field: source.as.organization.name
+      ignore_missing: true
   - set:
       tag: set_host_type
       field: host.type
       value: tor_exit_node
-  # The list is ingested in full at every interval, so an address that is still
-  # in the list is refreshed with a new expiration time. An address that is no
-  # longer in the list expires from the latest index after `expiration`.
+  # The list is ingested in full when it changes. Addresses still present are
+  # refreshed with a new deleted_at. Addresses missing from the new list keep
+  # their previous deleted_at and are removed from the latest index by the
+  # transform retention_policy after that time (plus max_age).
   - script:
       tag: script_deleted_at
       lang: painless
-      description: Computes `tor.exit_node.deleted_at` as `event.ingested` plus the configured expiration. An invalid or missing expiration falls back to 90 days. No error is set, because the latest transform excludes documents that have `error.message`.
+      description: Computes `tor.exit_node.deleted_at` as `event.ingested` plus the configured expiration. An invalid or missing expiration falls back to 2 hours. No error is set, because the latest transform excludes documents that have `error.message`.
       source: |-
-        long amount = 90L;
-        String unit = 'd';
+        long amount = 2L;
+        String unit = 'h';
         String dur = ctx._conf?.expiration;
         if (dur != null && dur.length() > 1) {
           String u = dur.substring(dur.length() - 1);

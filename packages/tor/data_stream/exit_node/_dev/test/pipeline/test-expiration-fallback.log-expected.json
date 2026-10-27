@@ -42,11 +42,17 @@
                     "region_iso_code": "US-NV",
                     "region_name": "Nevada"
                 },
-                "ip": "192.0.2.1"
+                "ip": "192.0.2.1",
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                }
             },
             "tor": {
                 "exit_node": {
-                    "deleted_at": "2027-01-24T09:47:32.385741284Z"
+                    "deleted_at": "2026-10-26T11:47:32.385741284Z"
                 }
             }
         }

@@ -14,7 +14,7 @@ This integration reads the plain text list served at `https://check.torproject.o
 
 ### How it works
 
-Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to check the list at a configurable interval (default `10m`). The request carries the `If-Modified-Since` header with the `Last-Modified` value of the last successful download, and the list is ingested only if the server returns `200`. A `304 Not Modified` response ingests nothing. The server was observed to support conditional requests this way, but the Tor Project does not document it. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `tor_exit_node`.
+Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to check the list at a configurable interval (default `10m`). The request carries the `If-Modified-Since` header with the `Last-Modified` value of the last successful download, and the list is ingested only if the server returns `200`. A `304 Not Modified` response ingests nothing. The server was observed to support conditional requests this way, but the Tor Project does not document it. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `tor_exit_node`. It also copies the address to `source.ip` and enriches `source.geo` and `source.as` (autonomous system number and organization) with the Elasticsearch GeoIP databases.
 
 The Tor Project states that the list is updated at most once every 40 minutes, and that fetching it every hour is reasonable. It does not document a fixed update time, so this integration uses the time of ingestion for `@timestamp` and `event.ingested`.
 
@@ -24,7 +24,7 @@ This integration collects the following dataset:
 
 - `exit_node`: Tor exit node IP addresses. Documents are written to `logs-tor.exit_node-<namespace>`.
 
-The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after the configured **Expiration**, counted from the last time it was ingested. The default is `90d`, so the latest index can be used to enrich older traffic with addresses that were Tor exit nodes during the last 90 days. The latest index keeps only the most recent document per address, so it does not record the time ranges during which an address was an exit node.
+The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after the configured **Expiration**, counted from the last time it was ingested. The default is `2h`, slightly longer than the Tor Project's list update cadence, so the latest index converges to the current bulk list. Addresses still in the list are refreshed on every successful download. The latest index keeps only the most recent document per address, so it does not record the time ranges during which an address was an exit node.
 
 The latest index is created with `index.mode: lookup` so that it can be used with the ES|QL [`LOOKUP JOIN`](https://www.elastic.co/docs/reference/query-languages/esql/esql-lookup-join) command, for example:
 
@@ -38,7 +38,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-tor.exit_node
 ### Supported use cases
 
 - Look up whether an address seen in your events is a Tor exit node, for example with an enrich policy or a custom detection rule built on `logs-tor_latest.exit_node`.
-- Hunt for activity that originates from the Tor network.
+- Hunt for activity that originates from the Tor network, including grouping exit nodes by autonomous system (`source.as`).
 
 ## What do I need to use this integration?
 
@@ -52,7 +52,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-tor.exit_node
 
 1. In Kibana, go to **Management > Integrations** and search for **Tor**.
 2. Select **Add Tor**.
-3. Adjust the **Interval** and **Expiration** if needed. The defaults are `10m` and `90d`.
+3. Adjust the **Interval** and **Expiration** if needed. The defaults are `10m` and `2h`.
 4. Select the agent policy and save the integration.
 
 ### Validation
