@@ -24,7 +24,7 @@ This integration collects the following dataset:
 
 - `exit_node`: Tor exit node IP addresses. Documents are written to `logs-tor.exit_node-<namespace>`.
 
-The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after the configured **Expiration**, counted from the last time it was ingested. The default is `90d`, so the latest index can be used to enrich older traffic with addresses that were Tor exit nodes during the last 90 days. The latest index keeps only the most recent document per address, so it does not record the time ranges during which an address was an exit node.
+The integration also installs a [latest transform](https://www.elastic.co/docs/explore-analyze/transforms/transform-overview#latest-transform-overview) that keeps one document per address in `logs-tor_latest.dest_exit_node-1`, available through the alias `logs-tor_latest.exit_node`. An address that is no longer in the list expires from the latest index after the configured **Expiration**, counted from the last time it was ingested. The default is `2h`, slightly longer than the Tor Project's list update cadence, so the latest index converges to the current bulk list. Addresses still in the list are refreshed on every successful download. The latest index keeps only the most recent document per address, so it does not record the time ranges during which an address was an exit node.
 
 The latest index is created with `index.mode: lookup` so that it can be used with the ES|QL [`LOOKUP JOIN`](https://www.elastic.co/docs/reference/query-languages/esql/esql-lookup-join) command, for example:
 
@@ -52,7 +52,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-tor.exit_node
 
 1. In Kibana, go to **Management > Integrations** and search for **Tor**.
 2. Select **Add Tor**.
-3. Adjust the **Interval** and **Expiration** if needed. The defaults are `10m` and `90d`.
+3. Adjust the **Interval** and **Expiration** if needed. The defaults are `10m` and `2h`.
 4. Select the agent policy and save the integration.
 
 ### Validation
@@ -151,7 +151,7 @@ An example event for `exit_node` looks as following:
     ],
     "tor": {
         "exit_node": {
-            "deleted_at": "2027-01-24T08:00:00.000Z"
+            "deleted_at": "2026-10-26T10:00:00.000Z"
         }
     }
 }
@@ -198,7 +198,7 @@ An example event for `exit_node` looks as following:
 | source.geo.timezone | The time zone of the location, such as IANA time zone name. | keyword |
 | source.ip | IP address of the source (IPv4 or IPv6). | ip |
 | tags | List of keywords used to tag each event. | keyword |
-| tor.exit_node.deleted_at | The timestamp when the address is (will be) removed from the latest destination index. It is `event.ingested` plus the configured expiration (`90d` by default). | date |
+| tor.exit_node.deleted_at | The timestamp when the address is (will be) removed from the latest destination index. It is `event.ingested` plus the configured expiration (`2h` by default). Addresses that remain in the bulk list are refreshed on each download; addresses that drop off expire after this grace period. | date |
 
 
 ### Inputs used
