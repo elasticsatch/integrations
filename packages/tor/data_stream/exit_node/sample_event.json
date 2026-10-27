@@ -1,0 +1,72 @@
+{
+    "@timestamp": "2026-10-26T08:00:00.000Z",
+    "data_stream": {
+        "dataset": "tor.exit_node",
+        "namespace": "ep",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.5.0"
+    },
+    "event": {
+        "category": [
+            "network"
+        ],
+        "ingested": "2026-10-26T08:00:00.000000000Z",
+        "kind": "state",
+        "original": "192.0.2.1",
+        "type": [
+            "info"
+        ],
+        "dataset": "tor.exit_node",
+        "module": "tor"
+    },
+    "host": {
+        "ip": [
+            "192.0.2.1"
+        ],
+        "type": "tor_exit_node"
+    },
+    "input": {
+        "type": "cel"
+    },
+    "labels": {
+        "interval": "10m"
+    },
+    "related": {
+        "ip": [
+            "192.0.2.1"
+        ]
+    },
+    "source": {
+        "ip": "192.0.2.1",
+        "geo": {
+            "city_name": "Las Vegas",
+            "continent_name": "North America",
+            "country_iso_code": "US",
+            "country_name": "United States",
+            "location": {
+                "lat": 36.17497,
+                "lon": -115.13722
+            },
+            "region_iso_code": "US-NV",
+            "region_name": "Nevada"
+        },
+        "as": {
+            "number": 64500,
+            "organization": {
+                "name": "Documentation ASN"
+            }
+        }
+    },
+    "tags": [
+        "preserve_original_event",
+        "forwarded",
+        "tor-exit-node"
+    ],
+    "tor": {
+        "exit_node": {
+            "deleted_at": "2026-10-26T10:00:00.000Z"
+        }
+    }
+}

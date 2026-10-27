@@ -1,0 +1,36 @@
+# newer versions go on top
+- version: "0.1.6"
+  changes:
+    - description: Restore package name `tor` and dataset `exit_node` (reverting the interim `onion_router` / `egress` rename). Keep the title "Tor Exit Node List (Unofficial)", 1h default interval, identifying User-Agent, package icon, and expanded docs.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/3
+- version: "0.1.5"
+  changes:
+    - description: Default Expiration to 2h so the latest index converges to the current bulk exit list instead of retaining addresses for 90 days.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/1
+- version: "0.1.4"
+  changes:
+    - description: Enrich exit node addresses with autonomous system data (`source.as`) from GeoLite2-ASN.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/1
+- version: "0.1.3"
+  changes:
+    - description: Rename the integration title to "Tor Exit Node List (Unofficial)" and add a trademark notice, following the Tor Project trademark policy.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/1
+- version: "0.1.2"
+  changes:
+    - description: Download the list only when it changed, using the If-Modified-Since header, and change the default interval to 10m.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/1
+- version: "0.1.1"
+  changes:
+    - description: Add the configurable expiration, source.ip and source.geo, and run the latest transform with the installing user's credentials.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/1
+- version: "0.1.0"
+  changes:
+    - description: Initial release of the Tor integration, collecting exit node IP addresses from the Tor Project bulk exit list.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/1
