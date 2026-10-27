@@ -159,7 +159,7 @@ An example event for `exit_node` looks as following:
     ],
     "tor": {
         "exit_node": {
-            "deleted_at": "2026-10-26T10:00:00.000Z"
+            "expires_at": "2026-10-26T10:00:00.000Z"
         }
     }
 }
@@ -190,7 +190,7 @@ An example event for `exit_node` looks as following:
 | host.type | Type of host. For Cloud providers this can be the machine type like `t2.medium`. If vm, this could be the container, for example, or other information meaningful in your environment. | keyword |
 | input.type | Type of Filebeat input. | keyword |
 | labels.interval | User-configured value for the `Interval` setting. | keyword |
-| tor.exit_node.deleted_at | The timestamp when the address is (will be) removed from the latest destination index. It is `event.ingested` plus the configured expiration (`2h` by default). Addresses that remain in the bulk list are refreshed on each download; addresses that drop off expire after this grace period. | date |
+| tor.exit_node.expires_at | The timestamp when the address expires from the latest destination index. It is `event.ingested` plus the configured expiration (`2h` by default). Addresses that remain in the bulk list are refreshed on each download; addresses that drop off expire after this grace period. | date |
 | related.ip | All of the IPs seen on your event. | ip |
 | source.as.number | Unique number allocated to the autonomous system. The autonomous system number (ASN) uniquely identifies each network on the Internet. | long |
 | source.as.organization.name | Organization name. | keyword |

@@ -26,11 +26,11 @@ program: |-
     get_request(state.url).with({
       "Header": (state.?cursor.last_modified.orValue("") != "") ?
         {
-          "User-Agent": ["Elastic-Agent tor integration/0.1.6"],
+          "User-Agent": ["Elastic-Agent tor integration/0.1.7"],
           "If-Modified-Since": [state.cursor.last_modified],
         }
       :
-        {"User-Agent": ["Elastic-Agent tor integration/0.1.6"]},
+        {"User-Agent": ["Elastic-Agent tor integration/0.1.7"]},
     }).do_request().as(resp,
       (resp.StatusCode == 304) ?
         // The list has not changed since the last successful request.

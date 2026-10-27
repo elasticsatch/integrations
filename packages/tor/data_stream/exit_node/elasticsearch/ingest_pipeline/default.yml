@@ -114,13 +114,13 @@ processors:
       field: host.type
       value: tor_exit_node
   # The list is ingested in full when it changes. Addresses still present are
-  # refreshed with a new deleted_at. Addresses missing from the new list keep
-  # their previous deleted_at and are removed from the latest index by the
+  # refreshed with a new expires_at. Addresses missing from the new list keep
+  # their previous expires_at and are removed from the latest index by the
   # transform retention_policy after that time (plus max_age).
   - script:
-      tag: script_deleted_at
+      tag: script_expires_at
       lang: painless
-      description: Computes `tor.exit_node.deleted_at` as `event.ingested` plus the configured expiration. An invalid or missing expiration falls back to 2 hours. No error is set, because the latest transform excludes documents that have `error.message`.
+      description: Computes `tor.exit_node.expires_at` as `event.ingested` plus the configured Expiration. An invalid or missing expiration falls back to 2 hours. No error is set, because the latest transform excludes documents that have `error.message`.
       source: |-
         long amount = 2L;
         String unit = 'h';
@@ -148,7 +148,7 @@ processors:
         if (ctx.tor.exit_node == null) {
           ctx.tor.exit_node = new HashMap();
         }
-        ctx.tor.exit_node.deleted_at = ingested.plusSeconds(secs).toString();
+        ctx.tor.exit_node.expires_at = ingested.plusSeconds(secs).toString();
   - remove:
       tag: remove_event_original
       field: event.original

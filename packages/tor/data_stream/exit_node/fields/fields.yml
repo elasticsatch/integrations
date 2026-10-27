@@ -2,10 +2,10 @@
   type: group
   description: Fields related to Tor exit node addresses.
   fields:
-    - name: deleted_at
+    - name: expires_at
       type: date
       description: >
-        The timestamp when the address is (will be) removed from the latest destination index.
+        The timestamp when the address expires from the latest destination index.
         It is `event.ingested` plus the configured expiration (`2h` by default). Addresses that
         remain in the bulk list are refreshed on each download; addresses that drop off expire
         after this grace period.

@@ -1,4 +1,9 @@
 # newer versions go on top
+- version: "0.1.7"
+  changes:
+    - description: Rename `tor.exit_node.deleted_at` to `tor.exit_node.expires_at` to match the Expiration setting, including the latest transform retention policy field.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/commits/cursor/tor-exit-node-integration-a426
 - version: "0.1.6"
   changes:
     - description: Restore package name `tor` and dataset `exit_node` (reverting the interim `onion_router` / `egress` rename). Keep the title "Tor Exit Node List (Unofficial)", 1h default interval, identifying User-Agent, package icon, and expanded docs.

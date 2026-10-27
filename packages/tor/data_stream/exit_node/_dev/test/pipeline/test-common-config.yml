@@ -1,7 +1,7 @@
 dynamic_fields:
   event.ingested: ".*"
   "@timestamp": ".*"
-  tor.exit_node.deleted_at: ".*"
+  tor.exit_node.expires_at: ".*"
 fields:
   _conf:
     interval: 1h
