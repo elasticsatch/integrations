@@ -35,8 +35,8 @@ streams:
         multi: false
         required: true
         show_user: true
-        default: 10m
-        description: Duration between requests to the Tor Project bulk exit list. Supported units for this parameter are h/m/s. Example `10m`. The Tor Project states that the list is updated at most once every 40 minutes. The list is downloaded only if it changed since the last successful request, which is checked with the `If-Modified-Since` header.
+        default: 1h
+        description: Duration between requests to the Tor Project bulk exit list. Supported units for this parameter are h/m/s. Example `1h`. The Tor Project states that the list is updated at most once every 40 minutes and that fetching it hourly is reasonable, so do not set this below `40m`. The list is downloaded only if it changed since the last successful request, which is checked with the `If-Modified-Since` header.
       - name: expiration
         type: text
         title: Expiration

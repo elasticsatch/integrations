@@ -1,10 +1,10 @@
 format_version: "3.4.2"
 name: onion_router
-title: Onion Router Egress List
+title: Onion Router Egress List (unofficial)
 version: 0.1.2
 source:
   license: "Elastic-2.0"
-description: Ingest onion-router egress IP addresses from the Tor Project bulk exit list with Elastic Agent.
+description: Unofficial integration that ingests onion-router egress IP addresses from the Tor Project bulk exit list. Not endorsed by or affiliated with The Tor Project. Tor is a trademark of The Tor Project; all rights reserved.
 type: integration
 categories:
   - security

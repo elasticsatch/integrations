@@ -1,16 +1,19 @@
 # newer versions go on top
 - version: "0.1.2"
   changes:
+    - description: Default polling interval changed to 1h, send an identifying User-Agent, and mark the package as unofficial with the Tor Project trademark credit line.
+      type: enhancement
+      link: https://github.com/elasticsatch/integrations/pull/2
     - description: Add package icon, expand README compatibility, data stream and troubleshooting sections.
       type: enhancement
-      link: https://github.com/elastic/integrations/pull/2 # TODO: replace with the actual PR number
+      link: https://github.com/elasticsatch/integrations/pull/2
 - version: "0.1.1"
   changes:
     - description: Remove "(Unofficial)" from the package title.
       type: enhancement
-      link: https://github.com/elastic/integrations/pull/2 # TODO: replace with the actual PR number
+      link: https://github.com/elasticsatch/integrations/pull/2
 - version: "0.1.0"
   changes:
     - description: Initial release of the Onion Router integration (renamed from the Tor package). Collects egress IP addresses from the Tor Project bulk exit list, enriches geo/ASN, and maintains a latest lookup index with a 2h grace period.
       type: enhancement
-      link: https://github.com/elastic/integrations/pull/2 # TODO: replace with the actual PR number
+      link: https://github.com/elasticsatch/integrations/pull/2

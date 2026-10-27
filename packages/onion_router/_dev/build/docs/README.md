@@ -1,8 +1,8 @@
-# Onion Router Egress List integration for Elastic
+# Onion Router Egress List (unofficial) integration for Elastic
 
 ## Overview
 
-This integration is not endorsed or sponsored by, or affiliated with, The Tor Project. Tor is a trademark of The Tor Project; all rights reserved. See the official Tor website at [https://torproject.org](https://torproject.org).
+This is an unofficial integration. It is not endorsed or sponsored by, or affiliated with, The Tor Project. Tor™ is a trademark of The Tor Project; all rights reserved. See the official Tor website at [https://torproject.org](https://torproject.org).
 
 The Onion Router integration collects egress IP addresses from the [bulk exit list](https://check.torproject.org/torbulkexitlist) published by [The Tor Project](https://www.torproject.org/). The product name uses the generic term "onion router" and does not claim affiliation with The Tor Project.
 
@@ -16,9 +16,9 @@ This integration reads the plain text list served at `https://check.torproject.o
 
 ### How it works
 
-Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to check the list at a configurable interval (default `10m`). The request carries the `If-Modified-Since` header with the `Last-Modified` value of the last successful download, and the list is ingested only if the server returns `200`. A `304 Not Modified` response ingests nothing. The server was observed to support conditional requests this way, but the Tor Project does not document it. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `onion_router_egress`. It also copies the address to `source.ip` and enriches `source.geo` and `source.as` (autonomous system number and organization) with the Elasticsearch GeoIP databases.
+Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to check the list at a configurable interval (default `1h`). The request carries the `If-Modified-Since` header with the `Last-Modified` value of the last successful download, and the list is ingested only if the server returns `200`. A `304 Not Modified` response ingests nothing. The server was observed to support conditional requests this way, but the Tor Project does not document it. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `onion_router_egress`. It also copies the address to `source.ip` and enriches `source.geo` and `source.as` (autonomous system number and organization) with the Elasticsearch GeoIP databases.
 
-The Tor Project states that the list is updated at most once every 40 minutes, and that fetching it every hour is reasonable. It does not document a fixed update time, so this integration uses the time of ingestion for `@timestamp` and `event.ingested`.
+The Tor Project states that the list is updated at most once every 40 minutes, and that fetching it every hour is reasonable. It does not document a fixed update time, so do not set the interval below `40m`. Each agent fetches the list directly from The Tor Project; Elastic does not redistribute it, and no event data from your environment is sent to The Tor Project. This integration uses the time of ingestion for `@timestamp` and `event.ingested`.
 
 ## What data does this integration collect?
 
@@ -37,6 +37,8 @@ FROM logs-*
 
 The lookup index mode cannot be applied to a data stream, so `logs-onion_router.egress-<namespace>` itself is a regular data stream and cannot be used on the right side of a join. Use the latest index instead. A lookup index is limited to one shard.
 
+List entries can remain for a long time after a relay stops exiting, and an egress address is not by itself malicious. Use this data as an enrichment or risk signal rather than for automatic blocking.
+
 ### Supported use cases
 
 - Look up whether an address seen in your events is an onion-router egress address, for example with an enrich policy or a custom detection rule built on `logs-onion_router_latest.egress`.
@@ -54,7 +56,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-onion_router.
 
 1. In Kibana, go to **Management > Integrations** and search for **Onion Router**.
 2. Select **Add Onion Router**.
-3. Adjust the **Interval** and **Expiration** if needed. The defaults are `10m` and `2h`.
+3. Adjust the **Interval** and **Expiration** if needed. The defaults are `1h` and `2h`.
 4. Select the agent policy and save the integration.
 
 ### Validation

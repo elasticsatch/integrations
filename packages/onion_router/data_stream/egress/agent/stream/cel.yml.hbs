@@ -25,9 +25,12 @@ program: |-
   state.with(
     get_request(state.url).with({
       "Header": (state.?cursor.last_modified.orValue("") != "") ?
-        {"If-Modified-Since": [state.cursor.last_modified]}
+        {
+          "User-Agent": ["Elastic-Agent onion_router integration/0.1.2"],
+          "If-Modified-Since": [state.cursor.last_modified],
+        }
       :
-        {},
+        {"User-Agent": ["Elastic-Agent onion_router integration/0.1.2"]},
     }).do_request().as(resp,
       (resp.StatusCode == 304) ?
         // The list has not changed since the last successful request.
