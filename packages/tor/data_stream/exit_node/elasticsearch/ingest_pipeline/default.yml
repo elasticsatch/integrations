@@ -90,6 +90,25 @@ processors:
       field: source.ip
       target_field: source.geo
       ignore_missing: true
+  - geoip:
+      tag: geoip_source_as
+      database_file: GeoLite2-ASN.mmdb
+      field: source.ip
+      target_field: source.as
+      properties:
+        - asn
+        - organization_name
+      ignore_missing: true
+  - rename:
+      tag: rename_source_as_asn
+      field: source.as.asn
+      target_field: source.as.number
+      ignore_missing: true
+  - rename:
+      tag: rename_source_as_organization_name
+      field: source.as.organization_name
+      target_field: source.as.organization.name
+      ignore_missing: true
   - set:
       tag: set_host_type
       field: host.type

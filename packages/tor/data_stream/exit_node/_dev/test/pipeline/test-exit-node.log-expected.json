@@ -43,7 +43,13 @@
                     "region_iso_code": "US-NV",
                     "region_name": "Nevada"
                 },
-                "ip": "192.0.2.1"
+                "ip": "192.0.2.1",
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                }
             },
             "tags": [
                 "preserve_original_event"
@@ -92,12 +98,18 @@
                     "country_name": "United Kingdom",
                     "location": {
                         "lat": 51.47687,
-                        "lon": -4.1E-4
+                        "lon": -0.00041
                     },
                     "region_iso_code": "GB-ENG",
                     "region_name": "England"
                 },
-                "ip": "2001:db8::1"
+                "ip": "2001:db8::1",
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                }
             },
             "tags": [
                 "preserve_original_event"
@@ -151,7 +163,13 @@
                     "region_iso_code": "NL-NH",
                     "region_name": "North Holland"
                 },
-                "ip": "198.51.100.7"
+                "ip": "198.51.100.7",
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                }
             },
             "tags": [
                 "preserve_original_event"

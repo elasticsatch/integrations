@@ -14,7 +14,7 @@ This integration reads the plain text list served at `https://check.torproject.o
 
 ### How it works
 
-Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to check the list at a configurable interval (default `10m`). The request carries the `If-Modified-Since` header with the `Last-Modified` value of the last successful download, and the list is ingested only if the server returns `200`. A `304 Not Modified` response ingests nothing. The server was observed to support conditional requests this way, but the Tor Project does not document it. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `tor_exit_node`.
+Elastic Agent uses the [CEL input](https://www.elastic.co/docs/reference/beats/filebeat/filebeat-input-cel) to check the list at a configurable interval (default `10m`). The request carries the `If-Modified-Since` header with the `Last-Modified` value of the last successful download, and the list is ingested only if the server returns `200`. A `304 Not Modified` response ingests nothing. The server was observed to support conditional requests this way, but the Tor Project does not document it. Every non-empty line that does not start with `#` becomes one event. The ingest pipeline stores the address in `host.ip` and sets `host.type` to `tor_exit_node`. It also copies the address to `source.ip` and enriches `source.geo` and `source.as` (autonomous system number and organization) with the Elasticsearch GeoIP databases.
 
 The Tor Project states that the list is updated at most once every 40 minutes, and that fetching it every hour is reasonable. It does not document a fixed update time, so this integration uses the time of ingestion for `@timestamp` and `event.ingested`.
 
@@ -38,7 +38,7 @@ The lookup index mode cannot be applied to a data stream, so `logs-tor.exit_node
 ### Supported use cases
 
 - Look up whether an address seen in your events is a Tor exit node, for example with an enrich policy or a custom detection rule built on `logs-tor_latest.exit_node`.
-- Hunt for activity that originates from the Tor network.
+- Hunt for activity that originates from the Tor network, including grouping exit nodes by autonomous system (`source.as`).
 
 ## What do I need to use this integration?
 
@@ -125,6 +125,12 @@ An example event for `exit_node` looks as following:
     },
     "source": {
         "ip": "192.0.2.1",
+        "as": {
+            "number": 64500,
+            "organization": {
+                "name": "Documentation ASN"
+            }
+        },
         "geo": {
             "city_name": "Las Vegas",
             "continent_name": "North America",
@@ -177,6 +183,8 @@ An example event for `exit_node` looks as following:
 | input.type | Type of Filebeat input. | keyword |
 | labels.interval | User-configured value for the `Interval` setting. It is used to calculate the expiration time. | keyword |
 | related.ip | All of the IPs seen on your event. | ip |
+| source.as.number | Unique number allocated to the autonomous system. The autonomous system number (ASN) uniquely identifies each network on the Internet. | long |
+| source.as.organization.name | Organization name. | keyword |
 | source.geo.city_name | City name. | keyword |
 | source.geo.continent_code | Two-letter code representing continent's name. | keyword |
 | source.geo.continent_name | Name of the continent. | keyword |

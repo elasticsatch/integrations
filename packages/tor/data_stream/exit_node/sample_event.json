@@ -51,6 +51,12 @@
             },
             "region_iso_code": "US-NV",
             "region_name": "Nevada"
+        },
+        "as": {
+            "number": 64500,
+            "organization": {
+                "name": "Documentation ASN"
+            }
         }
     },
     "tags": [
