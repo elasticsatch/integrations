@@ -10,11 +10,11 @@
 - name: event.module
   type: constant_keyword
   description: Event module
-  value: tor
+  value: onion_router
 - name: event.dataset
   type: constant_keyword
   description: Event dataset
-  value: tor.exit_node
+  value: onion_router.egress
 - name: "@timestamp"
   type: date
   description: Event timestamp.

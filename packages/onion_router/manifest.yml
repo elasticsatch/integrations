@@ -1,10 +1,10 @@
 format_version: "3.4.2"
-name: tor
-title: Tor Exit Node List (Unofficial)
-version: 0.1.5
+name: onion_router
+title: Onion Router Egress List (Unofficial)
+version: 0.1.0
 source:
   license: "Elastic-2.0"
-description: Ingest Tor exit node IP addresses from the Tor Project bulk exit list with Elastic Agent.
+description: Ingest onion-router egress IP addresses from the Tor Project bulk exit list with Elastic Agent.
 type: integration
 categories:
   - security
@@ -12,13 +12,13 @@ conditions:
   kibana:
     version: "^8.19.0 || ^9.1.0"
 policy_templates:
-  - name: tor
-    title: Tor Bulk Exit List
-    description: Collect Tor exit node IP addresses from the Tor Project bulk exit list.
+  - name: onion_router
+    title: Onion Router Bulk Egress List
+    description: Collect onion-router egress IP addresses from the Tor Project bulk exit list.
     inputs:
       - type: cel
-        title: Collect Tor exit node IP addresses
-        description: Collect Tor exit node IP addresses from the Tor Project bulk exit list.
+        title: Collect onion-router egress IP addresses
+        description: Collect onion-router egress IP addresses from the Tor Project bulk exit list.
         vars:
           - name: enable_request_tracer
             type: bool

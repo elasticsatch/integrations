@@ -1,7 +1,7 @@
 dynamic_fields:
   event.ingested: ".*"
   "@timestamp": ".*"
-  tor.exit_node.deleted_at: ".*"
+  onion_router.egress.deleted_at: ".*"
 fields:
   _conf:
     interval: 1h

@@ -19,7 +19,7 @@
                 "ip": [
                     "198.51.100.7"
                 ],
-                "type": "tor_exit_node"
+                "type": "onion_router_egress"
             },
             "labels": {
                 "interval": "1h"
@@ -50,8 +50,8 @@
                     }
                 }
             },
-            "tor": {
-                "exit_node": {
+            "onion_router": {
+                "egress": {
                     "deleted_at": "2026-10-26T21:47:32.824221324Z"
                 }
             }

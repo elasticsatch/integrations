@@ -20,7 +20,7 @@
                 "ip": [
                     "192.0.2.1"
                 ],
-                "type": "tor_exit_node"
+                "type": "onion_router_egress"
             },
             "labels": {
                 "interval": "1h"
@@ -54,8 +54,8 @@
             "tags": [
                 "preserve_original_event"
             ],
-            "tor": {
-                "exit_node": {
+            "onion_router": {
+                "egress": {
                     "deleted_at": "2026-10-26T11:47:31.942349026Z"
                 }
             }
@@ -80,7 +80,7 @@
                 "ip": [
                     "2001:db8::1"
                 ],
-                "type": "tor_exit_node"
+                "type": "onion_router_egress"
             },
             "labels": {
                 "interval": "1h"
@@ -114,8 +114,8 @@
             "tags": [
                 "preserve_original_event"
             ],
-            "tor": {
-                "exit_node": {
+            "onion_router": {
+                "egress": {
                     "deleted_at": "2026-10-26T11:47:31.94238659Z"
                 }
             }
@@ -140,7 +140,7 @@
                 "ip": [
                     "198.51.100.7"
                 ],
-                "type": "tor_exit_node"
+                "type": "onion_router_egress"
             },
             "labels": {
                 "interval": "1h"
@@ -174,8 +174,8 @@
             "tags": [
                 "preserve_original_event"
             ],
-            "tor": {
-                "exit_node": {
+            "onion_router": {
+                "egress": {
                     "deleted_at": "2026-10-26T11:47:31.942392217Z"
                 }
             }

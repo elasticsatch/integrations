@@ -1,5 +1,5 @@
 input: cel
-service: tor
+service: onion_router
 data_stream:
   vars:
     url: http://{{Hostname}}:{{Port}}/torbulkexitlist

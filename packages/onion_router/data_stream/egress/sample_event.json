@@ -1,7 +1,7 @@
 {
     "@timestamp": "2026-10-26T08:00:00.000Z",
     "data_stream": {
-        "dataset": "tor.exit_node",
+        "dataset": "onion_router.egress",
         "namespace": "ep",
         "type": "logs"
     },
@@ -18,14 +18,14 @@
         "type": [
             "info"
         ],
-        "dataset": "tor.exit_node",
-        "module": "tor"
+        "dataset": "onion_router.egress",
+        "module": "onion_router"
     },
     "host": {
         "ip": [
             "192.0.2.1"
         ],
-        "type": "tor_exit_node"
+        "type": "onion_router_egress"
     },
     "input": {
         "type": "cel"
@@ -62,10 +62,10 @@
     "tags": [
         "preserve_original_event",
         "forwarded",
-        "tor-exit-node"
+        "onion-router-egress"
     ],
-    "tor": {
-        "exit_node": {
+    "onion_router": {
+        "egress": {
             "deleted_at": "2026-10-26T10:00:00.000Z"
         }
     }

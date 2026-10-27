@@ -7,10 +7,10 @@
 - name: event.module
   external: ecs
   type: constant_keyword
-  value: tor
+  value: onion_router
 - name: event.dataset
   external: ecs
   type: constant_keyword
-  value: tor.exit_node
+  value: onion_router.egress
 - name: '@timestamp'
   external: ecs

@@ -1,9 +1,9 @@
-title: Tor Exit Nodes
+title: Onion Router Egress
 type: logs
 streams:
   - input: cel
-    title: Tor Exit Nodes
-    description: Collect Tor exit node IP addresses from the Tor Project bulk exit list.
+    title: Onion Router Egress
+    description: Collect onion-router egress IP addresses from the Tor Project bulk exit list.
     template_path: cel.yml.hbs
     vars:
       - name: url
@@ -46,7 +46,7 @@ streams:
         default: 2h
         description: >-
           Grace period after which an address that is no longer in the bulk list
-          is removed from the latest index (`logs-tor_latest.exit_node`). Addresses
+          is removed from the latest index (`logs-onion_router_latest.egress`). Addresses
           still in the list are refreshed on every successful download, so the
           latest index converges to the current list after this window. Choose a
           value slightly longer than the list update cadence (the Tor Project
@@ -67,7 +67,7 @@ streams:
         show_user: false
         default:
           - forwarded
-          - tor-exit-node
+          - onion-router-egress
       - name: preserve_original_event
         required: true
         show_user: true
@@ -84,4 +84,3 @@ streams:
         show_user: false
         description: >
           Processors are used to reduce the number of fields in the exported event or to enhance the event with metadata. This executes in the agent before the logs are parsed. See [Processors](https://www.elastic.co/guide/en/beats/filebeat/current/filtering-and-enhancing-data.html) for details.
-

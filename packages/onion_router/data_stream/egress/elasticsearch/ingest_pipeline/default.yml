@@ -112,7 +112,7 @@ processors:
   - set:
       tag: set_host_type
       field: host.type
-      value: tor_exit_node
+      value: onion_router_egress
   # The list is ingested in full when it changes. Addresses still present are
   # refreshed with a new deleted_at. Addresses missing from the new list keep
   # their previous deleted_at and are removed from the latest index by the
@@ -120,7 +120,7 @@ processors:
   - script:
       tag: script_deleted_at
       lang: painless
-      description: Computes `tor.exit_node.deleted_at` as `event.ingested` plus the configured expiration. An invalid or missing expiration falls back to 2 hours. No error is set, because the latest transform excludes documents that have `error.message`.
+      description: Computes `onion_router.egress.deleted_at` as `event.ingested` plus the configured expiration. An invalid or missing expiration falls back to 2 hours. No error is set, because the latest transform excludes documents that have `error.message`.
       source: |-
         long amount = 2L;
         String unit = 'h';
@@ -142,13 +142,13 @@ processors:
         }
         long secs = unit == 'd' ? amount * 86400L : (unit == 'h' ? amount * 3600L : (unit == 'm' ? amount * 60L : amount));
         ZonedDateTime ingested = ctx.event.ingested;
-        if (ctx.tor == null) {
-          ctx.tor = new HashMap();
+        if (ctx.onion_router == null) {
+          ctx.onion_router = new HashMap();
         }
-        if (ctx.tor.exit_node == null) {
-          ctx.tor.exit_node = new HashMap();
+        if (ctx.onion_router.egress == null) {
+          ctx.onion_router.egress = new HashMap();
         }
-        ctx.tor.exit_node.deleted_at = ingested.plusSeconds(secs).toString();
+        ctx.onion_router.egress.deleted_at = ingested.plusSeconds(secs).toString();
   - remove:
       tag: remove_event_original
       field: event.original
