@@ -1,8 +1,8 @@
-# Onion Router Egress List (Unofficial) integration for Elastic
+# Onion Router Egress List integration for Elastic
 
 ## Overview
 
-This is an unofficial integration. It is not endorsed or sponsored by, or affiliated with, The Tor Project. Tor is a trademark of The Tor Project; all rights reserved. See the official Tor website at [https://torproject.org](https://torproject.org).
+This integration is not endorsed or sponsored by, or affiliated with, The Tor Project. Tor is a trademark of The Tor Project; all rights reserved. See the official Tor website at [https://torproject.org](https://torproject.org).
 
 The Onion Router integration collects egress IP addresses from the [bulk exit list](https://check.torproject.org/torbulkexitlist) published by [The Tor Project](https://www.torproject.org/). The product name uses the generic term "onion router" and does not claim affiliation with The Tor Project.
 
