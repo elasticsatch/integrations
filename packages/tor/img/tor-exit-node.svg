@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72" role="img" aria-label="Tor exit node list">
-  <circle cx="36" cy="36" r="30" fill="none" stroke="#0B64DD" stroke-width="3" opacity="0.35"/>
-  <circle cx="36" cy="36" r="21" fill="none" stroke="#0B64DD" stroke-width="3" opacity="0.65"/>
-  <circle cx="36" cy="36" r="12" fill="none" stroke="#0B64DD" stroke-width="3"/>
-  <circle cx="36" cy="36" r="4" fill="#0B64DD"/>
-  <path d="M40 36h26" stroke="#0B64DD" stroke-width="3" stroke-linecap="round"/>
-  <path d="M60 30l6 6-6 6" fill="none" stroke="#0B64DD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
