@@ -6,7 +6,7 @@ This is an unofficial integration. It is not endorsed or sponsored by, or affili
 
 The Tor integration collects the IP addresses of Tor exit nodes from the [bulk exit list](https://check.torproject.org/torbulkexitlist) published by [The Tor Project](https://www.torproject.org/).
 
-Tor exit node addresses are useful for detection and investigation, for example to flag logins, API calls, or inbound connections that originate from the Tor network.
+Tor exit node addresses are useful for detection and investigation, for example to flag logins, API calls, or inbound connections that originate from the Tor network. They can also be used to exempt impossible-travel false alarms when a user appears in distant locations because successive sessions egressed through different Tor exit nodes.
 
 ### Compatibility
 
